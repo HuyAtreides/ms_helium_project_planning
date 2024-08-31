@@ -10,9 +10,9 @@ buildscript {
 }
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.3'
-	id 'io.spring.dependency-management' version '1.1.6'
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.6'
     id "org.flywaydb.flyway" version "10.17.2"
 }
 
@@ -21,7 +21,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+    languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -36,24 +36,25 @@ repositories {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5430/helium'
-    user = 'helium'
+    url = 'jdbc:postgresql://localhost:5430/${database}'
+    user = ${username}
     locations = ['classpath:/db.migration']
     driver = 'org.postgresql.Driver'
-    password = 'helium_password'
+    schemas = [${schema}]
+    password = ${password}
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation('org.springframework.boot:spring-boot-starter-web') {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'com.okta.spring:okta-spring-boot-starter:3.0.7'
-/*    implementation 'org.flywaydb:flyway-core'*/
- /*   implementation 'org.flywaydb:flyway-database-postgresql'*/
     implementation 'org.springframework.kafka:spring-kafka'
     compileOnly 'org.projectlombok:lombok'
-    implementation 'org.postgresql:postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'

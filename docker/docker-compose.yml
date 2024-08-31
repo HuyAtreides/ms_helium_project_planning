@@ -3,7 +3,6 @@ version: '3'
 services:
   database:
     image: 'postgres:16.4'
-    working_dir: '/helium/postgres/'
     container_name: database
     environment:
       - 'POSTGRES_DB=helium'
@@ -12,7 +11,7 @@ services:
     ports:
       - '5430:5432'
     volumes:
-      - ./ini_db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - ./init_db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
 
   broker:
     image: confluentinc/cp-server:7.5.0
@@ -21,7 +20,7 @@ services:
     container_name: broker
     healthcheck:
       test: "kafka-topics --bootstrap-server broker:9092 --list"
-      interval: 2s
+      interval: 7s
       timeout: 5s
       retries: 3
     ports:
@@ -65,7 +64,7 @@ services:
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
     healthcheck:
       test: ["CMD", "curl", "http://localhost:8081/subjects"]
-      interval: 3s
+      interval: 7s
       timeout: 5s
       retries: 3
 
@@ -105,7 +104,7 @@ services:
       --bootstrap-server broker:9092 \
       --partitions 3 \
       --replication-factor 1 \
-      --topic helium-topic
+      --topic ${topic_name}
     "
   rest-proxy:
     image: confluentinc/cp-kafka-rest:7.5.0
@@ -113,7 +112,7 @@ services:
       - broker
       - schema-registry
     ports:
-      - 8082:8082
+      - "8082:8082"
     hostname: rest-proxy
     container_name: rest-proxy
     environment:
