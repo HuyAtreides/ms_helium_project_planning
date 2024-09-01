@@ -1,13 +1,13 @@
-package app.helium.template;
+package app.helium.projectplanning;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TemplateApplication {
+public class ProjectPlanningApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TemplateApplication.class, args);
+		SpringApplication.run(ProjectPlanningApplication.class, args);
 	}
 
 }

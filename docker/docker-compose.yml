@@ -104,7 +104,7 @@ services:
       --bootstrap-server broker:9092 \
       --partitions 3 \
       --replication-factor 1 \
-      --topic ${topic_name}
+      --topic project
     "
   rest-proxy:
     image: confluentinc/cp-kafka-rest:7.5.0

@@ -1,4 +1,4 @@
-package app.helium.template;
+package app.helium.projectplanning;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

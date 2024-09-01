@@ -36,12 +36,12 @@ repositories {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5430/${database}'
-    user = $ { username }
+    url = 'jdbc:postgresql://localhost:5430/helium'
+    user = 'ms_project_planning'
     locations = ['classpath:/db.migration']
     driver = 'org.postgresql.Driver'
-    schemas = [$ { schema }]
-    password = $ { password }
+    schemas = ['helium_project_planning']
+    password = 'ms_project_planning_password'
 }
 
 dependencies {
