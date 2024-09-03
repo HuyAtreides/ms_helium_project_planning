@@ -1,10 +1,7 @@
-set search_path = helium;
+set search_path = project_planning;
 
 create table project_read_only (
 	id uuid primary key,
-	created_at timestamp default (now() at time zone 'utc'),
-	last_updated_at timestamp default (now() at time zone 'utc'),
-	last_updated_by_id uuid not null,
 	project_lead_id uuid null,
 	default_assignee_id uuid null
 );
@@ -34,7 +31,7 @@ create table issue_label (
 )
 
 create table issue (
-	id uudi primary key,
+	id uuid primary key,
 	summary varchar(500) not null,
 	description varchar(1000) null,
 	attachment_urls text[]  default ARRAY[],

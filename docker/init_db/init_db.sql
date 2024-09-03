@@ -1,2 +1,2 @@
 CREATE USER ms_project_planning WITH PASSWORD 'ms_project_planning_password';
-CREATE SCHEMA helium_project_planning AUTHORIZATION ms_project_planning;
+CREATE SCHEMA project_planning AUTHORIZATION ms_project_planning;
