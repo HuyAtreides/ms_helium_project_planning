@@ -14,6 +14,7 @@ plugins {
     id 'org.springframework.boot' version '3.3.3'
     id 'io.spring.dependency-management' version '1.1.6'
     id "org.flywaydb.flyway" version "10.17.2"
+    id "com.avast.gradle.docker-compose" version "0.17.8"
 }
 
 group = 'app.helium'
@@ -47,11 +48,9 @@ flyway {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation('org.springframework.boot:spring-boot-starter-web') {
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-    }
+    implementation('org.springframework.boot:spring-boot-starter-web')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'com.okta.spring:okta-spring-boot-starter:3.0.7'
+    /*implementation 'com.okta.spring:okta-spring-boot-starter:3.0.7'*/
     implementation 'org.springframework.kafka:spring-kafka'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
@@ -66,6 +65,21 @@ dependencies {
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+}
+
+tasks.register("componentTest", Test) {
+    dependsOn(tasks.composeUp)
+
+    finalizedBy(tasks.composeDown)
+}
+
+dockerCompose {
+    useComposeFiles = ['./src/docker/docker-compose.yml']
+    environment.put("SERVICES_HOST", "0.0.0.0")
+}
+
+bootRun {
+    args += ["--spring.profiles.active=dev"]
 }
