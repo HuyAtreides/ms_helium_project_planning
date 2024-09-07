@@ -32,17 +32,16 @@
     id uuid primary key,
     label varchar(500) not null,
     project_id uuid references project_read_only(id)
-  )
+  );
 
   create table issue (
     id uuid primary key,
     summary varchar(500) not null,
     description text null,
-    attachment_urls text[]  default ARRAY[],
+    attachment_urls text[]  default ARRAY[]::text[],
     created_at timestamp default (now() at time zone 'utc'),
     last_updated_at timestamp default (now() at time zone 'utc'),
     last_updated_by_id uuid not null,
-    label varchar(500) null references issue_label_relationship (label),
     point_estimate int not null,
     start_date timestamp,
     due_date timestamp,
