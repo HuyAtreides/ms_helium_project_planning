@@ -4,6 +4,7 @@ import app.helium.projectplanning.core.domain.Bug;
 import app.helium.projectplanning.core.domain.CustomIssue;
 import app.helium.projectplanning.core.domain.Epic;
 import app.helium.projectplanning.core.domain.Issue;
+import app.helium.projectplanning.core.domain.Issue.IssueBuilder;
 import app.helium.projectplanning.core.domain.SubTask;
 import app.helium.projectplanning.core.domain.Task;
 import app.helium.projectplanning.core.domain.UserStory;
@@ -29,7 +30,9 @@ public class IssueFactory {
         };
     }
 
-    private Task createTask(CreateNewIssueRequest request) {
+    public <C extends Issue, B extends IssueBuilder<C, B>> Issue.IssueBuilder<C, B> populateCommonIssueFields(
+            CreateNewIssueRequest request, Issue.IssueBuilder<C, B> builder
+    ) {
         var project = request.getProject();
         UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
                 : request.getAssigneeId();
@@ -37,7 +40,7 @@ public class IssueFactory {
                 : request.getReporterId();
         Instant now = Instant.now();
 
-        return Task.builder()
+        return builder
                 .name(request.getIssueName())
                 .summary(request.getSummary())
                 .description(request.getDescription())
@@ -45,125 +48,53 @@ public class IssueFactory {
                 .pointEstimate(request.getPointEstimate())
                 .assigneeId(assigneeId)
                 .reporterId(reporterId)
+                .startDate(request.getStartDate())
+                .dueDate(request.getDueDate())
                 .lastUpdatedAt(now)
                 .createdAt(now)
                 .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()))
-                .build();
+                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()));
+    }
+
+    private Task createTask(CreateNewIssueRequest request) {
+        Task task = populateCommonIssueFields(request, Task.builder()).build();
+        task.updateDueDateBaseOnPointEstimateAndStartDate();
+
+        return task;
     }
 
     private Epic createEpic(CreateNewIssueRequest request) {
-        var project = request.getProject();
-        UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
-                : request.getAssigneeId();
-        UUID reporterId = request.getReporterId() == null ? project.getProjectLeadId()
-                : request.getReporterId();
-        Instant now = Instant.now();
+        Epic epic = populateCommonIssueFields(request, Epic.builder()).build();
+        epic.updateDueDateBaseOnPointEstimateAndStartDate();
 
-        return Epic.builder()
-                .name(request.getIssueName())
-                .summary(request.getSummary())
-                .description(request.getDescription())
-                .attachmentURLs(request.getAttachmentURLs())
-                .pointEstimate(request.getPointEstimate())
-                .assigneeId(assigneeId)
-                .reporterId(reporterId)
-                .lastUpdatedAt(now)
-                .createdAt(now)
-                .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()))
-                .build();
+        return epic;
     }
 
     private UserStory createUserStory(CreateNewIssueRequest request) {
-        var project = request.getProject();
-        UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
-                : request.getAssigneeId();
-        UUID reporterId = request.getReporterId() == null ? project.getProjectLeadId()
-                : request.getReporterId();
-        Instant now = Instant.now();
+        UserStory userStory = populateCommonIssueFields(request, UserStory.builder()).build();
+        userStory.updateDueDateBaseOnPointEstimateAndStartDate();
 
-        return UserStory.builder()
-                .name(request.getIssueName())
-                .summary(request.getSummary())
-                .description(request.getDescription())
-                .attachmentURLs(request.getAttachmentURLs())
-                .pointEstimate(request.getPointEstimate())
-                .assigneeId(assigneeId)
-                .reporterId(reporterId)
-                .lastUpdatedAt(now)
-                .createdAt(now)
-                .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()))
-                .build();
+        return userStory;
     }
 
     private SubTask createSubTask(CreateNewIssueRequest request) {
-        var project = request.getProject();
-        UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
-                : request.getAssigneeId();
-        UUID reporterId = request.getReporterId() == null ? project.getProjectLeadId()
-                : request.getReporterId();
-        Instant now = Instant.now();
+        SubTask subTask = populateCommonIssueFields(request, SubTask.builder()).build();
+        subTask.updateDueDateBaseOnPointEstimateAndStartDate();
 
-        return SubTask.builder()
-                .name(request.getIssueName())
-                .summary(request.getSummary())
-                .description(request.getDescription())
-                .attachmentURLs(request.getAttachmentURLs())
-                .pointEstimate(request.getPointEstimate())
-                .assigneeId(assigneeId)
-                .reporterId(reporterId)
-                .lastUpdatedAt(now)
-                .createdAt(now)
-                .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()))
-                .build();
+        return subTask;
     }
 
     private CustomIssue createCustomIssue(CreateNewIssueRequest request) {
-        var project = request.getProject();
-        UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
-                : request.getAssigneeId();
-        UUID reporterId = request.getReporterId() == null ? project.getProjectLeadId()
-                : request.getReporterId();
-        Instant now = Instant.now();
+        CustomIssue customIssue = populateCommonIssueFields(request, CustomIssue.builder()).build();
+        customIssue.updateDueDateBaseOnPointEstimateAndStartDate();
 
-        return CustomIssue.builder()
-                .name(request.getIssueName())
-                .summary(request.getSummary())
-                .description(request.getDescription())
-                .attachmentURLs(request.getAttachmentURLs())
-                .pointEstimate(request.getPointEstimate())
-                .assigneeId(assigneeId)
-                .reporterId(reporterId)
-                .lastUpdatedAt(now)
-                .createdAt(now)
-                .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()))
-                .build();
+        return customIssue;
     }
 
     private Bug createBug(CreateNewIssueRequest request) {
-        var project = request.getProject();
-        UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
-                : request.getAssigneeId();
-        UUID reporterId = request.getReporterId() == null ? project.getProjectLeadId()
-                : request.getReporterId();
-        Instant now = Instant.now();
+        Bug bug = populateCommonIssueFields(request, Bug.builder()).build();
+        bug.updateDueDateBaseOnPointEstimateAndStartDate();
 
-        return Bug.builder()
-                .name(request.getIssueName())
-                .summary(request.getSummary())
-                .description(request.getDescription())
-                .attachmentURLs(request.getAttachmentURLs())
-                .pointEstimate(request.getPointEstimate())
-                .assigneeId(assigneeId)
-                .reporterId(reporterId)
-                .lastUpdatedAt(now)
-                .createdAt(now)
-                .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()))
-                .build();
+        return bug;
     }
 }

@@ -1,6 +1,7 @@
 package app.helium.projectplanning.core.domain.request;
 
 import app.helium.projectplanning.core.domain.Project;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import lombok.Data;
@@ -14,6 +15,8 @@ public class CreateNewIssueRequest {
     private UUID issueTypeId;
     private String issueName;
     private UUID issueStatusId;
+    private Instant startDate;
+    private Instant dueDate;
     private Project project;
     private UUID reporterId;
     private UUID assigneeId;

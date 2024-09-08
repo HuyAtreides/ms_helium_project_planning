@@ -14,7 +14,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -35,6 +37,7 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "issue", schema = "project_planning")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Issue {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -107,13 +110,15 @@ public abstract class Issue {
     @JoinColumn(name = "issue_status_id")
     private IssueStatus issueStatus;
 
-
     public Issue(UUID id, String summary, String description, List<String> attachmentURLs,
             Instant createdAt, Instant lastUpdatedAt, UUID lastUpdatedById, Integer pointEstimate,
             Instant startDate, Instant dueDate, UUID assigneeId, UUID reporterId, UUID projectId,
             UUID sprintId) {
         validateDateRange(startDate, dueDate);
         validateURLs(attachmentURLs);
+        validateIfDueDateInThePast(dueDate);
+        validatePointEstimate(pointEstimate);
+        validateDateRangeWithPointEstimate(pointEstimate, startDate, dueDate);
         this.id = id;
         this.summary = summary;
         this.description = description;
@@ -136,6 +141,33 @@ public abstract class Issue {
 
     public void assignToReporter(UUID reporterId) {
         this.reporterId = reporterId;
+    }
+
+    public void updateDueDateBaseOnPointEstimateAndStartDate() {
+        this.dueDate = calculateDueDateFromPointEstimateAndStartDate();
+    }
+
+    private Instant calculateDueDateFromPointEstimateAndStartDate() {
+        if (startDate != null && pointEstimate != null) {
+            return startDate.plus(pointEstimate, ChronoUnit.DAYS);
+        }
+
+        return null;
+    }
+
+    private void validateIfDueDateInThePast(Instant dueDate) {
+        if (dueDate.isBefore(Instant.now())) {
+            throw new IllegalArgumentException("Due date can not be in the past");
+        }
+    }
+
+    private void validateDateRangeWithPointEstimate(Integer pointEstimate, Instant startDate,
+            Instant dueDate) {
+        if (pointEstimate != null && startDate != null && dueDate != null) {
+            if (startDate.plus(pointEstimate, ChronoUnit.DAYS).isAfter(dueDate)) {
+                throw new IllegalArgumentException("Start date + point estimate is after due date");
+            }
+        }
     }
 
     private void validatePointEstimate(Integer pointEstimate) {
