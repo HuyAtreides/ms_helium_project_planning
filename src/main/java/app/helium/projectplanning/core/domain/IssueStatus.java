@@ -1,6 +1,7 @@
 package app.helium.projectplanning.core.domain;
 
 
+import app.helium.projectplanning.core.domain.constant.SupportedIssueStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,4 +45,16 @@ public class IssueStatus {
     @Column(name = "custom", nullable = false)
     @JdbcTypeCode(SqlTypes.BOOLEAN)
     private boolean custom;
+
+    @Column(name = "project_id")
+    @JdbcTypeCode(SqlTypes.UUID)
+    private UUID projectId;
+
+    public SupportedIssueStatus getStatus() {
+        if (custom) {
+            return SupportedIssueStatus.CUSTOM;
+        }
+
+        return SupportedIssueStatus.from(name);
+    }
 }

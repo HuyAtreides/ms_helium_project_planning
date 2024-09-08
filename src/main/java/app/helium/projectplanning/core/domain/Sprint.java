@@ -1,12 +1,17 @@
 package app.helium.projectplanning.core.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -53,7 +58,7 @@ public class Sprint {
 
     @Column(name = "project_id")
     @JdbcTypeCode(SqlTypes.UUID)
-    private UUID project_id;
+    private UUID projectId;
 
     @Column(name = "created_at")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
@@ -67,15 +72,12 @@ public class Sprint {
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
     private UUID lastUpdatedById;
 
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "sprint_id")
+    private Set<Issue> issues = new LinkedHashSet<>();
+
+    //TODO: implement after create sprint feature
     public void addIssue(Issue issue) {
-
-    }
-
-    public void removeIssue(Issue issue) {
-
-    }
-
-    public void updateSprint() {
 
     }
 }

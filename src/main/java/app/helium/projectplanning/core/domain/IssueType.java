@@ -1,5 +1,6 @@
 package app.helium.projectplanning.core.domain;
 
+import app.helium.projectplanning.core.domain.constant.SupportedIssueType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -48,4 +48,16 @@ public class IssueType {
     @Column(name = "custom", nullable = false)
     @JdbcTypeCode(SqlTypes.BOOLEAN)
     private boolean custom;
+
+    @Column(name = "project_id")
+    @JdbcTypeCode(SqlTypes.UUID)
+    private UUID projectId;
+
+    public SupportedIssueType getType() {
+        if (custom) {
+            return SupportedIssueType.CUSTOM;
+        }
+
+        return SupportedIssueType.from(name);
+    }
 }

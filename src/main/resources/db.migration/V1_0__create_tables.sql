@@ -34,8 +34,26 @@
     project_id uuid references project_read_only(id)
   );
 
+  create table issue_status (
+    id uuid primary key,
+    name varchar(200) not null,
+    description varchar(1000) null,
+    custom boolean not null default false,
+    project_id uuid references project_read_only(id)
+  );
+
+  create table issue_type (
+    id uuid primary key,
+    name varchar(200) not null,
+    description varchar(1000) null,
+    icon_url varchar(200) not null,
+    custom boolean not null default false,
+    project_id uuid references project_read_only(id)
+  );
+
   create table issue (
     id uuid primary key,
+    name varchar(500) unique not null,
     summary varchar(500) not null,
     description text null,
     attachment_urls text[]  default ARRAY[]::text[],
@@ -46,27 +64,12 @@
     start_date timestamp,
     due_date timestamp,
     dtype varchar(31),
+    assignee_id uuid,
+    reporter_id uuid,
+    issue_status_id references issue_status(id),
+    issue_type_id references issue_type(id),
     project_id uuid references project_read_only(id),
     sprint_id uuid references sprint(id)
-  );
-
-  create table issue_status (
-    id uuid primary key,
-    name varchar(200) not null,
-    description varchar(1000) null,
-    custom boolean not null default false,
-    project_id uuid references project_read_only(id),
-    issue_id uuid references issue(id)
-  );
-
-  create table issue_type (
-    id uuid primary key,
-    name varchar(200) not null,
-    description varchar(1000) null,
-    icon_url varchar(200) not null,
-    custom boolean not null default false,
-    project_id uuid references project_read_only(id),
-    issue_id uuid references issue(id)
   );
 
 
