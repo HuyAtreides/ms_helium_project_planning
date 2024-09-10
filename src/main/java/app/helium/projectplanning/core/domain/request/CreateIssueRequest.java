@@ -4,10 +4,12 @@ import app.helium.projectplanning.core.domain.Project;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class CreateNewIssueRequest {
+@Builder
+public class CreateIssueRequest {
     private String summary;
     private String description;
     private List<String> attachmentURLs;
@@ -18,6 +20,7 @@ public class CreateNewIssueRequest {
     private Instant startDate;
     private Instant dueDate;
     private Project project;
+    private UUID creatorId;
     private UUID reporterId;
     private UUID assigneeId;
 }

@@ -8,7 +8,7 @@ import app.helium.projectplanning.core.domain.Issue.IssueBuilder;
 import app.helium.projectplanning.core.domain.SubTask;
 import app.helium.projectplanning.core.domain.Task;
 import app.helium.projectplanning.core.domain.UserStory;
-import app.helium.projectplanning.core.domain.request.CreateNewIssueRequest;
+import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
 import java.time.Instant;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class IssueFactory {
 
-    public Issue createIssue(CreateNewIssueRequest request) {
+    public Issue createIssue(CreateIssueRequest request) {
         var project = request.getProject();
         var issueType = project.getIssueTypeById(request.getIssueTypeId());
 
@@ -31,7 +31,7 @@ public class IssueFactory {
     }
 
     public <C extends Issue, B extends IssueBuilder<C, B>> Issue.IssueBuilder<C, B> populateCommonIssueFields(
-            CreateNewIssueRequest request, Issue.IssueBuilder<C, B> builder
+            CreateIssueRequest request, Issue.IssueBuilder<C, B> builder
     ) {
         var project = request.getProject();
         UUID assigneeId = request.getAssigneeId() == null ? project.getDefaultAssigneeId()
@@ -56,42 +56,42 @@ public class IssueFactory {
                 .issueStatus(project.getIssueStatusById(request.getIssueStatusId()));
     }
 
-    private Task createTask(CreateNewIssueRequest request) {
+    private Task createTask(CreateIssueRequest request) {
         Task task = populateCommonIssueFields(request, Task.builder()).build();
         task.updateDueDateBaseOnPointEstimateAndStartDate();
 
         return task;
     }
 
-    private Epic createEpic(CreateNewIssueRequest request) {
+    private Epic createEpic(CreateIssueRequest request) {
         Epic epic = populateCommonIssueFields(request, Epic.builder()).build();
         epic.updateDueDateBaseOnPointEstimateAndStartDate();
 
         return epic;
     }
 
-    private UserStory createUserStory(CreateNewIssueRequest request) {
+    private UserStory createUserStory(CreateIssueRequest request) {
         UserStory userStory = populateCommonIssueFields(request, UserStory.builder()).build();
         userStory.updateDueDateBaseOnPointEstimateAndStartDate();
 
         return userStory;
     }
 
-    private SubTask createSubTask(CreateNewIssueRequest request) {
+    private SubTask createSubTask(CreateIssueRequest request) {
         SubTask subTask = populateCommonIssueFields(request, SubTask.builder()).build();
         subTask.updateDueDateBaseOnPointEstimateAndStartDate();
 
         return subTask;
     }
 
-    private CustomIssue createCustomIssue(CreateNewIssueRequest request) {
+    private CustomIssue createCustomIssue(CreateIssueRequest request) {
         CustomIssue customIssue = populateCommonIssueFields(request, CustomIssue.builder()).build();
         customIssue.updateDueDateBaseOnPointEstimateAndStartDate();
 
         return customIssue;
     }
 
-    private Bug createBug(CreateNewIssueRequest request) {
+    private Bug createBug(CreateIssueRequest request) {
         Bug bug = populateCommonIssueFields(request, Bug.builder()).build();
         bug.updateDueDateBaseOnPointEstimateAndStartDate();
 
