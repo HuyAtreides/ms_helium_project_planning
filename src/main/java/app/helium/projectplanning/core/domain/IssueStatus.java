@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,6 +38,7 @@ public class IssueStatus {
 
     @Column(name = "name", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @NotBlank
     private String name;
 
     @Column(name = "description")
@@ -48,6 +51,7 @@ public class IssueStatus {
 
     @Column(name = "project_id")
     @JdbcTypeCode(SqlTypes.UUID)
+    @NotNull
     private UUID projectId;
 
     public SupportedIssueStatus getStatus() {

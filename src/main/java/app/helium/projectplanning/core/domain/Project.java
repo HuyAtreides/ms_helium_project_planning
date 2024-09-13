@@ -14,10 +14,12 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -28,12 +30,14 @@ import org.hibernate.type.SqlTypes;
 @Setter(AccessLevel.PACKAGE)
 @Table(name = "project_read_only", schema = "project_planning")
 @AllArgsConstructor
+@Immutable
 public class Project {
 
     @Id
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.UUID)
     @EqualsAndHashCode.Include
+    @Getter(AccessLevel.PUBLIC)
     private UUID id;
 
     @Column(name = "project_lead_id")
@@ -48,18 +52,22 @@ public class Project {
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "project_id")
+    @Default
     private Set<Issue> issues = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "project_id")
+    @Default
     private Set<Sprint> sprints = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "project_id")
+    @Default
     private Set<IssueType> issueTypes = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "project_id")
+    @Default
     private Set<IssueStatus> issueStatuses = new LinkedHashSet<>();
 
     public void addIssue(Issue issue) {
@@ -86,7 +94,7 @@ public class Project {
                 .orElseThrow(() -> new NoSuchElementException("Issue type with " + id + " not found"));
     }
 
-    public IssueStatus getIssueStatusById(UUID issueStatusId) {
+    public IssueStatus getIssueStatusById(UUID id) {
         return issueStatuses.stream()
                 .filter(issueStatus -> issueStatus.getId().equals(id))
                 .findFirst()

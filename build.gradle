@@ -65,10 +65,17 @@ dependencies {
     implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.17.2'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.17.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.3.3'
 }
 
 test {
     useJUnitPlatform()
+    testLogging.showStandardStreams = true
+    testLogging.exceptionFormat = 'full'
+
+    filter {
+        includeTestsMatching 'app.helium.projectplanning.unit.*'
+    }
 }
 
 tasks.register("componentTest", Test) {

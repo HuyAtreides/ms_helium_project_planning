@@ -1,9 +1,8 @@
 package app.helium.projectplanning.core.domain;
 
-import static app.helium.projectplanning.core.domain.utils.DateRangeUtils.validateDateRange;
-import static app.helium.projectplanning.core.domain.utils.URLUtils.validateURLs;
-
+import app.helium.projectplanning.core.domain.constraint.ValidDateRange;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,13 +13,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +31,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.hibernate.validator.constraints.URL;
 
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +39,7 @@ import org.hibernate.type.SqlTypes;
 @Setter(AccessLevel.PACKAGE)
 @Entity
 @Table(name = "issue", schema = "project_planning")
+@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Issue {
 
@@ -47,6 +52,7 @@ public abstract class Issue {
 
     @Column(name = "summary")
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @NotBlank
     private String summary;
 
     @Lob
@@ -56,35 +62,33 @@ public abstract class Issue {
 
     @Column(name = "name", unique = true)
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @NotBlank
     private String name;
 
     @Column(name = "attachment_urls")
     @JdbcTypeCode(SqlTypes.ARRAY)
-    private List<String> attachmentURLs;
+    @Builder.Default
+    private List<@URL(message = "URL is malformed", protocol = "https", host = "media.helium.com") String> attachmentURLs = new ArrayList<>();
 
     @Column(name = "created_at")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
+    @NotNull
     private Instant createdAt;
 
     @Column(name = "last_updated_at")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
+    @NotNull
     private Instant lastUpdatedAt;
 
     @Column(name = "last_updated_by_id")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
+    @NotNull
     private UUID lastUpdatedById;
 
     @Column(name = "point_estimate")
     @JdbcTypeCode(SqlTypes.INTEGER)
+    @Positive
     private Integer pointEstimate;
-
-    @Column(name = "start_date")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
-    private Instant startDate;
-
-    @Column(name = "due_date")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
-    private Instant dueDate;
 
     @Column(name = "assignee_id")
     @JdbcTypeCode(SqlTypes.UUID)
@@ -96,7 +100,13 @@ public abstract class Issue {
 
     @Column(name = "project_id")
     @JdbcTypeCode(SqlTypes.UUID)
+    @NotNull
     private UUID projectId;
+
+    @Column(name = "creator_id")
+    @JdbcTypeCode(SqlTypes.UUID)
+    @NotNull
+    private UUID creatorId;
 
     @Column(name = "sprint_id")
     @JdbcTypeCode(SqlTypes.UUID)
@@ -110,73 +120,8 @@ public abstract class Issue {
     @JoinColumn(name = "issue_status_id")
     private IssueStatus issueStatus;
 
-    public Issue(UUID id, String summary, String description, List<String> attachmentURLs,
-            Instant createdAt, Instant lastUpdatedAt, UUID lastUpdatedById, Integer pointEstimate,
-            Instant startDate, Instant dueDate, UUID assigneeId, UUID reporterId, UUID projectId,
-            UUID sprintId) {
-        validateDateRange(startDate, dueDate);
-        validateURLs(attachmentURLs);
-        validateIfDueDateInThePast(dueDate);
-        validatePointEstimate(pointEstimate);
-        validateDateRangeWithPointEstimate(pointEstimate, startDate, dueDate);
-        this.id = id;
-        this.summary = summary;
-        this.description = description;
-        this.attachmentURLs = attachmentURLs;
-        this.createdAt = createdAt;
-        this.lastUpdatedAt = lastUpdatedAt;
-        this.lastUpdatedById = lastUpdatedById;
-        this.pointEstimate = pointEstimate;
-        this.startDate = startDate;
-        this.dueDate = dueDate;
-        this.assigneeId = assigneeId;
-        this.reporterId = reporterId;
-        this.projectId = projectId;
-        this.sprintId = sprintId;
-    }
-
-    public void assignToUser(UUID userId) {
-        this.assigneeId = userId;
-    }
-
-    public void assignToReporter(UUID reporterId) {
-        this.reporterId = reporterId;
-    }
-
-    public void updateDueDateBaseOnPointEstimateAndStartDate() {
-        this.dueDate = calculateDueDateFromPointEstimateAndStartDate();
-    }
-
-    private Instant calculateDueDateFromPointEstimateAndStartDate() {
-        if (startDate != null && pointEstimate != null) {
-            return startDate.plus(pointEstimate, ChronoUnit.DAYS);
-        }
-
-        return null;
-    }
-
-    private void validateIfDueDateInThePast(Instant dueDate) {
-        if (dueDate.isBefore(Instant.now())) {
-            throw new IllegalArgumentException("Due date can not be in the past");
-        }
-    }
-
-    private void validateDateRangeWithPointEstimate(Integer pointEstimate, Instant startDate,
-            Instant dueDate) {
-        if (pointEstimate != null && startDate != null && dueDate != null) {
-            if (startDate.plus(pointEstimate, ChronoUnit.DAYS).isAfter(dueDate)) {
-                throw new IllegalArgumentException("Start date + point estimate is after due date");
-            }
-        }
-    }
-
-    private void validatePointEstimate(Integer pointEstimate) {
-        if (pointEstimate == null) {
-            return;
-        }
-
-        if (pointEstimate <= 0) {
-            throw new IllegalArgumentException("Point estimate can be smaller or equal to 0");
-        }
-    }
+    @Embedded
+    @ValidDateRange
+    @Valid
+    private DateRange dateRange;
 }
