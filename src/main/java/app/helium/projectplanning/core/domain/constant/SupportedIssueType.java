@@ -15,8 +15,11 @@ public enum SupportedIssueType {
     public final String value;
 
     public static SupportedIssueType from(String stringValue) {
-        return Arrays.stream(SupportedIssueType.values()).filter(type -> type.value == stringValue).findFirst().orElseThrow(
-                () -> new IllegalArgumentException("Unknown default issue type")
-        );
+        return Arrays.stream(SupportedIssueType.values())
+                .filter(type -> type.value.equals(stringValue))
+                .findFirst()
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Unknown default issue type")
+                );
     }
 }

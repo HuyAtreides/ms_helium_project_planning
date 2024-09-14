@@ -21,7 +21,7 @@ public class IssueFactory {
         var project = request.getProject();
         var issueType = project.getIssueTypeById(request.getIssueTypeId());
 
-        return switch (issueType.getType()) {
+        return switch (issueType.getSupportedType()) {
             case TASK -> createTask(request);
             case EPIC -> createEpic(request);
             case USER_STORY -> createUserStory(request);
@@ -55,8 +55,8 @@ public class IssueFactory {
                 .lastUpdatedAt(now)
                 .projectId(project.getId())
                 .createdAt(now)
-                .issueType(project.getIssueTypeById(request.getIssueTypeId()))
-                .issueStatus(project.getIssueStatusById(request.getIssueStatusId()));
+                .type(project.getIssueTypeById(request.getIssueTypeId()))
+                .status(project.getIssueStatusById(request.getIssueStatusId()));
     }
 
     private Task createTask(CreateIssueRequest request) {

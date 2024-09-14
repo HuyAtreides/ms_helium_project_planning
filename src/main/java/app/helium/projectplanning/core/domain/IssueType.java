@@ -38,14 +38,17 @@ public class IssueType {
     @Column(name = "name", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @NotBlank
+    @Getter(AccessLevel.PUBLIC)
     private String name;
 
     @Column(name = "description")
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Getter(AccessLevel.PUBLIC)
     private String description;
 
     @Column(name = "icon_url")
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Getter(AccessLevel.PUBLIC)
     private String iconURL;
 
     @Column(name = "custom", nullable = false)
@@ -57,7 +60,7 @@ public class IssueType {
     @NotNull
     private UUID projectId;
 
-    public SupportedIssueType getType() {
+    public SupportedIssueType getSupportedType() {
         if (custom) {
             return SupportedIssueType.CUSTOM;
         }

@@ -1,5 +1,7 @@
 package app.helium.projectplanning.core.domain;
 
+import app.helium.projectplanning.core.domain.constant.SupportedIssueStatus;
+import app.helium.projectplanning.core.domain.constant.SupportedIssueType;
 import app.helium.projectplanning.core.domain.constraint.ValidDateRange;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -24,7 +26,6 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,12 +43,11 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Issue {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.UUID)
-    @EqualsAndHashCode.Include
+    /*@EqualsAndHashCode.Include*/
     private UUID id;
 
     @Column(name = "summary")
@@ -114,11 +114,13 @@ public abstract class Issue {
 
     @ManyToOne
     @JoinColumn(name = "issue_type_id")
-    private IssueType issueType;
+    @Getter(AccessLevel.PUBLIC)
+    private IssueType type;
 
     @ManyToOne
     @JoinColumn(name = "issue_status_id")
-    private IssueStatus issueStatus;
+    @Getter(AccessLevel.PUBLIC)
+    private IssueStatus status;
 
     @Embedded
     @ValidDateRange

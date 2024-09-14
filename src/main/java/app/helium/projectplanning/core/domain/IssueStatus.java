@@ -39,10 +39,12 @@ public class IssueStatus {
     @Column(name = "name", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @NotBlank
+    @Getter(AccessLevel.PUBLIC)
     private String name;
 
     @Column(name = "description")
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Getter(AccessLevel.PUBLIC)
     private String description;
 
     @Column(name = "custom", nullable = false)
@@ -54,7 +56,7 @@ public class IssueStatus {
     @NotNull
     private UUID projectId;
 
-    public SupportedIssueStatus getStatus() {
+    public SupportedIssueStatus getSupportedStatus() {
         if (custom) {
             return SupportedIssueStatus.CUSTOM;
         }
