@@ -26,7 +26,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.domain.Persistable;
 
-@Slf4j
 @Entity
 @Builder
 @NoArgsConstructor

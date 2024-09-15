@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 buildscript {
     repositories {
         maven {
@@ -71,8 +73,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    testLogging.showStandardStreams = true
-    testLogging.exceptionFormat = 'full'
+
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+    }
 
     filter {
         includeTestsMatching 'app.helium.projectplanning.test.unit.*'
@@ -81,8 +87,13 @@ test {
 
 tasks.register("integrationTest", Test) {
     useJUnitPlatform()
-    testLogging.showStandardStreams = true
-    testLogging.exceptionFormat = 'full'
+
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+    }
+
     filter {
         includeTestsMatching 'app.helium.projectplanning.test.integration.*'
     }
@@ -91,6 +102,11 @@ tasks.register("integrationTest", Test) {
 tasks.register("srcTest", Test) {
     dependsOn(tasks.composeUp)
 
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+    }
     useJUnitPlatform()
     testLogging.showStandardStreams = true
     testLogging.exceptionFormat = 'full'

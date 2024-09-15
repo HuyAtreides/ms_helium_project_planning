@@ -94,10 +94,12 @@ public abstract class Issue {
 
     @Column(name = "assignee_id")
     @JdbcTypeCode(SqlTypes.UUID)
+    @Getter(AccessLevel.PUBLIC)
     private UUID assigneeId;
 
     @Column(name = "reporter_id")
     @JdbcTypeCode(SqlTypes.UUID)
+    @Getter(AccessLevel.PUBLIC)
     private UUID reporterId;
 
     @Column(name = "project_id")

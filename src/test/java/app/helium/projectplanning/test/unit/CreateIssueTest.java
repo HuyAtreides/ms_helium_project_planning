@@ -155,6 +155,34 @@ public class CreateIssueTest {
         assertSame(createdIssueClass, issue.getClass());
     }
 
+    @Test
+    void issue_should_be_created_with_default_lead_id_and_assignee_id_from_project() {
+        UUID issueStatusId = UUID.fromString("97880669-bde4-4737-8e0d-cd8e14b6588f");
+        UUID issueTypeId = UUID.fromString("7231b12c-fd1a-4312-9a2f-aca28bf765dc");
+        UUID assigneeId = UUID.randomUUID();
+        UUID leadId = UUID.randomUUID();
+        Project project = Project.builder()
+                .id(UUID.randomUUID())
+                .issueStatuses(
+                        Set.of(IssueStatus.builder().id(issueStatusId).name("in_progress").build())
+                )
+                .issueTypes(
+                        Set.of(IssueType.builder().id(issueTypeId).name("user_story").build())
+                )
+                .defaultAssigneeId(assigneeId)
+                .projectLeadId(leadId)
+                .build();
+
+        var issue = issueFactory.createIssue(
+                CreateIssueRequest.builder()
+                        .issueStatusId(issueStatusId)
+                        .issueTypeId(issueTypeId)
+                        .project(project).build()
+        );
+        assertEquals(assigneeId, issue.getAssigneeId());
+        assertEquals(leadId, issue.getReporterId());
+    }
+
     private static Stream<Arguments> invalidCreateIssueRequest() {
         return Stream.of(
                 Arguments.of(
