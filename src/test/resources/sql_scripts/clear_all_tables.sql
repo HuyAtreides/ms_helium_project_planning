@@ -1,0 +1,7 @@
+truncate table project_planning.issue cascade
+truncate table project_planning.issue_type cascade
+truncate table project_planning.issue_status cascade
+truncate table project_planning.issue_label cascade
+truncate table project_planning.issue_label_relationship cascade
+truncate table project_planning.sprint cascade
+truncate table project_planning.project_read_only cascade

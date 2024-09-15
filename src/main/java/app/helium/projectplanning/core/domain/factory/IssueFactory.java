@@ -1,14 +1,14 @@
 package app.helium.projectplanning.core.domain.factory;
 
-import app.helium.projectplanning.core.domain.Bug;
-import app.helium.projectplanning.core.domain.CustomIssue;
-import app.helium.projectplanning.core.domain.DateRange;
-import app.helium.projectplanning.core.domain.Epic;
-import app.helium.projectplanning.core.domain.Issue;
-import app.helium.projectplanning.core.domain.Issue.IssueBuilder;
-import app.helium.projectplanning.core.domain.SubTask;
-import app.helium.projectplanning.core.domain.Task;
-import app.helium.projectplanning.core.domain.UserStory;
+import app.helium.projectplanning.core.domain.model.Bug;
+import app.helium.projectplanning.core.domain.model.CustomIssue;
+import app.helium.projectplanning.core.domain.model.DateRange;
+import app.helium.projectplanning.core.domain.model.Epic;
+import app.helium.projectplanning.core.domain.model.Issue;
+import app.helium.projectplanning.core.domain.model.Issue.IssueBuilder;
+import app.helium.projectplanning.core.domain.model.SubTask;
+import app.helium.projectplanning.core.domain.model.Task;
+import app.helium.projectplanning.core.domain.model.UserStory;
 import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
 import java.time.Instant;
 import java.util.UUID;

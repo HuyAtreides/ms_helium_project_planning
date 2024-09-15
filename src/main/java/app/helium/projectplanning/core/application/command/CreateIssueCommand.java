@@ -1,4 +1,4 @@
-package app.helium.projectplanning.core.domain.request;
+package app.helium.projectplanning.core.application.command;
 
 import app.helium.projectplanning.core.domain.model.Project;
 import java.time.Instant;
@@ -9,17 +9,16 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CreateIssueRequest {
+public class CreateIssueCommand {
     private String summary;
     private String description;
     private List<String> attachmentURLs;
     private Integer pointEstimate;
     private UUID issueTypeId;
-    private String issueName;
     private UUID issueStatusId;
     private Instant startDate;
     private Instant dueDate;
-    private Project project;
+    private UUID projectId;
     private UUID creatorId;
     private UUID reporterId;
     private UUID assigneeId;

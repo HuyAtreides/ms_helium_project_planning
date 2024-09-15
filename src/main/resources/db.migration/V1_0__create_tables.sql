@@ -2,13 +2,14 @@
 
   create table project_read_only (
     id uuid primary key,
+    "key" varchar(7) not null,
     project_lead_id uuid null,
     default_assignee_id uuid null
   );
 
-  revoke insert on table project_read_only from ms_project_planning;
-  revoke update on table project_read_only from ms_project_planning;
-  revoke delete on table project_read_only from ms_project_planning;
+ -- revoke update on table project_read_only from ms_project_planning;
+
+  create sequence issue_sequence;
 
   create table sprint (
     id uuid primary key,
@@ -46,7 +47,7 @@
     id uuid primary key,
     name varchar(200) not null,
     description varchar(1000) null,
-    icon_url varchar(200) not null,
+    icon_url varchar(200) null,
     custom boolean not null default false,
     project_id uuid references project_read_only(id)
   );
@@ -66,8 +67,9 @@
     dtype varchar(31),
     assignee_id uuid,
     reporter_id uuid,
-    issue_status_id references issue_status(id),
-    issue_type_id references issue_type(id),
+    creator_id uuid not null,
+    issue_status_id uuid references issue_status(id),
+    issue_type_id uuid references issue_type(id),
     project_id uuid references project_read_only(id),
     sprint_id uuid references sprint(id)
   );
