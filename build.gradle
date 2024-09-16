@@ -77,7 +77,7 @@ test {
     testLogging {
         showStandardStreams = true
         exceptionFormat = 'full'
-        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_OUT]
     }
 
     filter {
@@ -91,7 +91,7 @@ tasks.register("integrationTest", Test) {
     testLogging {
         showStandardStreams = true
         exceptionFormat = 'full'
-        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_OUT]
     }
 
     filter {
@@ -105,7 +105,7 @@ tasks.register("srcTest", Test) {
     testLogging {
         showStandardStreams = true
         exceptionFormat = 'full'
-        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED]
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_OUT]
     }
     useJUnitPlatform()
     testLogging.showStandardStreams = true

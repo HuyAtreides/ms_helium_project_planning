@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -24,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.data.domain.Persistable;
 
+@Slf4j
 @Entity
 @Builder
 @NoArgsConstructor
@@ -34,7 +33,7 @@ import org.springframework.data.domain.Persistable;
 @Table(name = "project_read_only", schema = "project_planning")
 @AllArgsConstructor
 @Immutable
-public class Project implements Persistable<UUID> {
+public class Project {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -57,7 +56,7 @@ public class Project implements Persistable<UUID> {
     @Getter(AccessLevel.PUBLIC)
     private UUID defaultAssigneeId;
 
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "project_id")
     @Default
     private Set<Issue> issues = new LinkedHashSet<>();
@@ -77,12 +76,8 @@ public class Project implements Persistable<UUID> {
     @Default
     private Set<IssueStatus> issueStatuses = new LinkedHashSet<>();
 
-    @Transient
-    private boolean newEntityAddedToProject;
-
     public void addIssue(Issue issue) {
         issues.add(issue);
-        setNewEntityAddedToProject(true);
     }
 
     //TODO: implement after create_sprint feature
@@ -115,15 +110,10 @@ public class Project implements Persistable<UUID> {
         return key + "-" + sequence;
     }
 
-    public Issue findIssueByName(String name) {
+    private Issue findIssueById(UUID id) {
         return issues.stream()
-                .filter(issue -> issue.getName().equals(name))
+                .filter(issue -> issue.getId().equals(id))
                 .findFirst()
                 .orElseThrow();
-    }
-
-    @Override
-    public boolean isNew() {
-        return newEntityAddedToProject;
     }
 }

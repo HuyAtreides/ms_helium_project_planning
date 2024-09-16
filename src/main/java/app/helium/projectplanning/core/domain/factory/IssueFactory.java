@@ -12,8 +12,10 @@ import app.helium.projectplanning.core.domain.model.UserStory;
 import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
 import java.time.Instant;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class IssueFactory {
 
@@ -42,6 +44,7 @@ public class IssueFactory {
         Instant now = Instant.now();
 
         return builder
+                .id(UUID.randomUUID())
                 .name(request.getIssueName())
                 .summary(request.getSummary())
                 .description(request.getDescription())

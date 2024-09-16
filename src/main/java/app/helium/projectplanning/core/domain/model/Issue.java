@@ -30,9 +30,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -45,10 +48,11 @@ import org.hibernate.validator.constraints.URL;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Issue {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.UUID)
     @EqualsAndHashCode.Include
+    @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private UUID id;
 
     @Column(name = "summary")

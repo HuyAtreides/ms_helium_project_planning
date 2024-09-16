@@ -1,9 +1,11 @@
 package app.helium.projectplanning.test.integration;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.helium.projectplanning.core.application.command.CreateIssueCommand;
 import app.helium.projectplanning.core.application.service.ProjectPlanningService;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class CreateIssueIntegrationTest {
             },
             config = @SqlConfig(transactionMode = TransactionMode.ISOLATED)
     )
-    public void issue_should_be_created_in_database_when_given_valid_create_issue_command() {
+    public void issue_should_be_created_when_given_valid_create_issue_command() {
         var command = CreateIssueCommand.builder()
                 .assigneeId(UUID.randomUUID())
                 .summary("New Issue")
@@ -42,5 +44,30 @@ public class CreateIssueIntegrationTest {
 
         var issue = service.createIssue(command);
         assertNotNull(issue.getName());
+        assertNotNull(issue.getId());
+    }
+
+    @Test
+    @Sql(
+            scripts = {
+                    "classpath:/sql_scripts/clear_all_tables.sql",
+                    "classpath:/sql_scripts/insert_project_with_minimal_columns.sql"
+            },
+            config = @SqlConfig(transactionMode = TransactionMode.ISOLATED)
+    )
+    public void issue_can_not_be_created_when_given_project_can_not_be_found() {
+        var command = CreateIssueCommand.builder()
+                .assigneeId(UUID.randomUUID())
+                .summary("New Issue")
+                .creatorId(UUID.randomUUID())
+                .projectId(UUID.fromString("1d6846ce-0a75-4a39-a49e-dea0d4be8b25"))
+                .pointEstimate(2)
+                .issueStatusId(issueStatusId)
+                .issueTypeId(issueTypeId)
+                .build();
+
+        assertThrows(NoSuchElementException.class, () -> {
+            service.createIssue(command);
+        });
     }
 }

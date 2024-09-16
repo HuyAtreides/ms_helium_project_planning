@@ -27,6 +27,7 @@ public class ProjectPlanningService {
 
     @Transactional
     public Issue createIssue(CreateIssueCommand command) {
+        log.info("message = create new issue, request = {}", command);
         UUID projectId = command.getProjectId();
         Project project = projectRepository.findById(projectId).orElseThrow();
         long nextSequence = projectRepository.getNextSequence();
@@ -37,6 +38,6 @@ public class ProjectPlanningService {
         project.addIssue(issue);
         projectRepository.save(project);
 
-        return project.findIssueByName(issueName);
+        return issue;
     }
 }
