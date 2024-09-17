@@ -7,7 +7,7 @@
     default_assignee_id uuid null
   );
 
- -- revoke update on table project_read_only from ms_project_planning;
+  revoke update on table project_read_only from ms_project_planning;
 
   create sequence issue_sequence;
 
@@ -20,7 +20,7 @@
     last_updated_by_id uuid not null,
     start_date timestamp,
     end_date timestamp,
-    project_id uuid references project_read_only(id)
+    project_id uuid
   );
 
   create table issue_label_relationship (
@@ -32,7 +32,7 @@
   create table issue_label (
     id uuid primary key,
     label varchar(500) not null,
-    project_id uuid references project_read_only(id)
+    project_id uuid
   );
 
   create table issue_status (
@@ -40,7 +40,7 @@
     name varchar(200) not null,
     description varchar(1000) null,
     custom boolean not null default false,
-    project_id uuid references project_read_only(id)
+    project_id uuid
   );
 
   create table issue_type (
@@ -49,7 +49,7 @@
     description varchar(1000) null,
     icon_url varchar(200) null,
     custom boolean not null default false,
-    project_id uuid references project_read_only(id)
+    project_id uuid
   );
 
   create table issue (
@@ -68,10 +68,10 @@
     assignee_id uuid,
     reporter_id uuid,
     creator_id uuid not null,
-    issue_status_id uuid references issue_status(id),
-    issue_type_id uuid references issue_type(id),
-    project_id uuid references project_read_only(id),
-    sprint_id uuid references sprint(id)
+    issue_status_id uuid,
+    issue_type_id uuid,
+    project_id uuid,
+    sprint_id uuid
   );
 
 
