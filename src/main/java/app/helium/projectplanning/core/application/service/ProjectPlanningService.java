@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -25,7 +26,7 @@ public class ProjectPlanningService {
     );
     private final ProjectRepository projectRepository;
 
-    @Transactional
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Issue createIssue(CreateIssueCommand command) {
         log.info("message = create new issue, request = {}", command);
         UUID projectId = command.getProjectId();
@@ -33,7 +34,10 @@ public class ProjectPlanningService {
         long nextSequence = projectRepository.getNextSequence();
         String issueName = project.generateIssueName(nextSequence);
 
-        CreateIssueRequest request = mapper.mapToCreateIssueRequest(command, issueName, project);
+        //TODO: retrieve user id from security context
+        UUID creatorId = UUID.fromString("e0dfb21f-1ad9-42eb-94a3-98383ffa6618");
+
+        CreateIssueRequest request = mapper.mapToCreateIssueRequest(command, creatorId, issueName, project);
         Issue issue = issueFactory.createIssue(request);
         project.addIssue(issue);
         projectRepository.save(project);

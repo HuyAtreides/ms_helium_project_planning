@@ -1,0 +1,15 @@
+{
+  "summary": "implement create issue feature",
+  "description": "As a user, I would like to create an issue, so that our team can work on",
+  "attachmentURLs": [
+    "https://media.helium.com/design.pdf",
+    "https://media.helium.com/details-requirements.docx"
+  ],
+  "pointEstimate": 3,
+  "issueTypeId": "f998b0aa-050d-41ad-bcad-e7b4e2b5a17e",
+  "issueStatusId": "b8a8a0bd-888b-45b5-845d-1c4b316c9288",
+  "startDate": "2025-04-11T11:30:00.000+07:00",
+  "dueDate": "2025-09-04T07:30:00.000+07:00",
+  "assigneeId": "ac48b88a-bdad-4774-8350-759d4e16c5cd",
+  "reporterId": "e5299095-a5e2-4173-b8c0-8be1c22cf8d5"
+}

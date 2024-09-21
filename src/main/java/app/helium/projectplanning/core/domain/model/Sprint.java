@@ -77,7 +77,7 @@ public class Sprint {
     private Set<Issue> issues = new LinkedHashSet<>();
 
     //TODO: implement after create sprint feature
-    public void addIssue(Issue issue) {
+    void addIssue(Issue issue) {
 
     }
 }

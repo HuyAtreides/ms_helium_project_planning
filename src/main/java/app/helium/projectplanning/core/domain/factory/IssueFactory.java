@@ -33,7 +33,7 @@ public class IssueFactory {
         };
     }
 
-    public <C extends Issue, B extends IssueBuilder<C, B>> Issue.IssueBuilder<C, B> populateCommonIssueFields(
+    private <C extends Issue, B extends IssueBuilder<C, B>> Issue.IssueBuilder<C, B> populateCommonIssueFields(
             CreateIssueRequest request, Issue.IssueBuilder<C, B> builder
     ) {
         var project = request.getProject();

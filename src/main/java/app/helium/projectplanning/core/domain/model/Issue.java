@@ -58,11 +58,13 @@ public abstract class Issue {
     @Column(name = "summary")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @NotBlank
+    @Getter(AccessLevel.PUBLIC)
     private String summary;
 
     @Lob
     @Column(name = "description")
     @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Getter(AccessLevel.PUBLIC)
     private String description;
 
     @Column(name = "name", unique = true)
@@ -73,27 +75,32 @@ public abstract class Issue {
 
     @Column(name = "attachment_urls")
     @JdbcTypeCode(SqlTypes.ARRAY)
+    @Getter(AccessLevel.PUBLIC)
     @Builder.Default
     private List<@URL(message = "URL is malformed", protocol = "https", host = "media.helium.com") String> attachmentURLs = new ArrayList<>();
 
     @Column(name = "created_at")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private Instant createdAt;
 
     @Column(name = "last_updated_at")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private Instant lastUpdatedAt;
 
     @Column(name = "last_updated_by_id")
     @JdbcTypeCode(SqlTypes.UUID)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private UUID lastUpdatedById;
 
     @Column(name = "point_estimate")
     @JdbcTypeCode(SqlTypes.INTEGER)
     @Positive
+    @Getter(AccessLevel.PUBLIC)
     private Integer pointEstimate;
 
     @Column(name = "assignee_id")
@@ -109,11 +116,13 @@ public abstract class Issue {
     @Column(name = "project_id")
     @JdbcTypeCode(SqlTypes.UUID)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private UUID projectId;
 
     @Column(name = "creator_id")
     @JdbcTypeCode(SqlTypes.UUID)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private UUID creatorId;
 
     @Column(name = "sprint_id")
@@ -133,5 +142,6 @@ public abstract class Issue {
     @Embedded
     @ValidDateRange
     @Valid
+    @Getter(AccessLevel.PUBLIC)
     private DateRange dateRange;
 }

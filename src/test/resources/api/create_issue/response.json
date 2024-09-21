@@ -1,0 +1,25 @@
+{
+  "summary": "implement create issue feature",
+  "description": "As a user, I would like to create an issue, so that our team can work on",
+  "attachmentURLs": [
+    "https://media.helium.com/design.pdf",
+    "https://media.helium.com/details-requirements.docx"
+  ],
+  "pointEstimate": 3,
+  "startDate": "2025-04-11T04:30:00Z",
+  "dueDate": "2025-09-04T00:30:00Z",
+  "creatorId": "e0dfb21f-1ad9-42eb-94a3-98383ffa6618",
+  "projectId": "1d6846ce-0a75-4a39-a49e-dea0d4be8b40",
+  "type": {
+    "name": "user_story",
+    "description": "User Story Type",
+    "iconURL": "https://media.helium.com/user_story_type_icon"
+  },
+  "name": "LUMON-1",
+  "status": {
+    "name": "to_do",
+    "description": "To Do Status"
+  },
+  "assigneeId": "ac48b88a-bdad-4774-8350-759d4e16c5cd",
+  "reporterId": "e5299095-a5e2-4173-b8c0-8be1c22cf8d5"
+}

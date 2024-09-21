@@ -49,6 +49,8 @@ flyway {
 }
 
 dependencies {
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+    testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation('org.springframework.boot:spring-boot-starter-web')
@@ -97,6 +99,20 @@ tasks.register("integrationTest", Test) {
 
     filter {
         includeTestsMatching 'app.helium.projectplanning.test.integration.*'
+    }
+}
+
+tasks.register("blackBoxTest", Test) {
+    useJUnitPlatform()
+
+    testLogging {
+        showStandardStreams = true
+        exceptionFormat = 'full'
+        events = [TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_OUT]
+    }
+
+    filter {
+        includeTestsMatching 'app.helium.projectplanning.test.blackbox.*'
     }
 }
 

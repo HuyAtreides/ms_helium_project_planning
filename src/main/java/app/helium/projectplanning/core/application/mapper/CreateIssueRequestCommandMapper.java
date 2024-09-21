@@ -3,6 +3,7 @@ package app.helium.projectplanning.core.application.mapper;
 import app.helium.projectplanning.core.application.command.CreateIssueCommand;
 import app.helium.projectplanning.core.domain.model.Project;
 import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
+import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,5 +13,6 @@ public interface CreateIssueRequestCommandMapper {
     @Mapping(target = ".", source = "command")
     @Mapping(target = "issueName", source = "issueName")
     @Mapping(target = "project", source = "project")
-    CreateIssueRequest mapToCreateIssueRequest(CreateIssueCommand command, String issueName, Project project);
+    @Mapping(target = "creatorId", source = "creatorId")
+    CreateIssueRequest mapToCreateIssueRequest(CreateIssueCommand command, UUID creatorId, String issueName, Project project);
 }

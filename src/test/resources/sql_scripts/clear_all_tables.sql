@@ -5,3 +5,4 @@ truncate table project_planning.issue_label cascade
 truncate table project_planning.issue_label_relationship cascade
 truncate table project_planning.sprint cascade
 truncate table project_planning.project_read_only cascade
+alter sequence project_planning.issue_sequence restart
