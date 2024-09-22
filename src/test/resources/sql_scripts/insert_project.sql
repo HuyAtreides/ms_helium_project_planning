@@ -1,5 +1,4 @@
 
-select * from project_planning.project_read_only;
 insert into project_planning.project_read_only (
    id,
    "key"

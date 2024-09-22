@@ -27,7 +27,7 @@ public class CreateIssueIntegrationTest {
     @Sql(
             scripts = {
                     "classpath:/sql_scripts/clear_all_tables.sql",
-                    "classpath:/sql_scripts/insert_project_with_minimal_columns.sql"
+                    "classpath:/sql_scripts/insert_project.sql"
             },
             config = @SqlConfig(transactionMode = TransactionMode.ISOLATED)
     )
@@ -50,7 +50,7 @@ public class CreateIssueIntegrationTest {
     @Sql(
             scripts = {
                     "classpath:/sql_scripts/clear_all_tables.sql",
-                    "classpath:/sql_scripts/insert_project_with_minimal_columns.sql"
+                    "classpath:/sql_scripts/insert_project.sql"
             },
             config = @SqlConfig(transactionMode = TransactionMode.ISOLATED)
     )

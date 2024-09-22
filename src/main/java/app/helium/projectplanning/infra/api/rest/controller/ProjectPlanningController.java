@@ -22,8 +22,8 @@ public class ProjectPlanningController {
     private final CreateIssuePayloadMapper mapper = Mappers.getMapper(CreateIssuePayloadMapper.class);
     private final IssuePayloadMapper issuePayloadMapper = Mappers.getMapper(IssuePayloadMapper.class);
 
-    @PostMapping("/projects/{project_id}/create/issue")
-    public IssuePayload helloWorld(
+    @PostMapping(ApiEndPoint.CREATE_NEW_ISSUE)
+    public IssuePayload createIssue(
             @PathVariable(name = "project_id") UUID projectId,
             @RequestBody CreateIssuePayload payload
     ) {
