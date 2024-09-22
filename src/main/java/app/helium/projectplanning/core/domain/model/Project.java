@@ -1,5 +1,6 @@
 package app.helium.projectplanning.core.domain.model;
 
+import app.helium.projectplanning.core.domain.request.CreateSprintRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,11 +27,11 @@ import org.hibernate.type.SqlTypes;
 
 @Entity
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Getter(AccessLevel.PACKAGE)
 @Setter(AccessLevel.PACKAGE)
 @Table(name = "project_read_only", schema = "project_planning")
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Immutable
 public class Project {
 
@@ -60,7 +61,7 @@ public class Project {
     @Default
     private Set<Issue> issues = new LinkedHashSet<>();
 
-    @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumn(name = "project_id")
     @Default
     private Set<Sprint> sprints = new LinkedHashSet<>();
@@ -82,6 +83,24 @@ public class Project {
     //TODO: implement after create_sprint feature
     public void addIssue(Issue issue, UUID sprintId) {
 
+    }
+
+    public Sprint createNewSprint(CreateSprintRequest request) {
+        Sprint sprint = Sprint.builder()
+                .id(request.getId())
+                .name(request.getName())
+                .dateRange(DateRange.from(request.getStartDate(), request.getDueDate()))
+                .lastUpdatedAt(request.getCreatedAt())
+                .createdAt(request.getCreatedAt())
+                .lastUpdatedById(request.getCreatorId())
+                .creatorId(request.getCreatorId())
+                .projectId(this.id)
+                .goal(request.getGoal())
+                .build();
+
+        sprints.add(sprint);
+
+        return sprint;
     }
 
     private Sprint getSprintById(UUID id) {

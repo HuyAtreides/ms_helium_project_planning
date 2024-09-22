@@ -19,7 +19,8 @@
     last_updated_at timestamp default (now() at time zone 'utc'),
     last_updated_by_id uuid not null,
     start_date timestamp,
-    end_date timestamp,
+    due_date timestamp,
+    creator_id uuid not null,
     project_id uuid
   );
 
