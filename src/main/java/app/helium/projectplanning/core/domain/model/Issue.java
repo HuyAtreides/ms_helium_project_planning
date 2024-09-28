@@ -1,6 +1,7 @@
 package app.helium.projectplanning.core.domain.model;
 
 import app.helium.projectplanning.core.domain.validation.constraint.ValidDateRange;
+import app.helium.projectplanning.core.domain.validation.constraint.ValidDueDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -14,7 +15,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -41,8 +41,9 @@ import org.hibernate.validator.constraints.URL;
 @Table(name = "issue", schema = "project_planning")
 @AllArgsConstructor
 @ToString
+@ValidDueDate
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Issue {
+public abstract class Issue implements HasDueDateItem {
     @Id
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.UUID)
@@ -140,4 +141,10 @@ public abstract class Issue {
     @Valid
     @Getter(AccessLevel.PUBLIC)
     private DateRange dateRange;
+
+    @Override
+    public Instant getDueDate() {
+        return dateRange.getEndDate();
+    }
+
 }

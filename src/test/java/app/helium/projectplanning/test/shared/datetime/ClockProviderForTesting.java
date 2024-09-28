@@ -11,7 +11,7 @@ public class ClockProviderForTesting implements ClockProvider {
     @Override
     public Clock getClock() {
         return Clock.fixed(
-                Instant.parse(CommonTestConstant.FIXED_DATETIME),
+                CommonTestConstant.FIXED_NOW_INSTANT,
                 ZoneId.of("UTC")
         );
     }

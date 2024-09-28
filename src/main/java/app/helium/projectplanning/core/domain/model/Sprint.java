@@ -1,6 +1,7 @@
 package app.helium.projectplanning.core.domain.model;
 
 import app.helium.projectplanning.core.domain.validation.constraint.ValidDateRange;
+import app.helium.projectplanning.core.domain.validation.constraint.ValidDueDate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -35,7 +36,8 @@ import org.hibernate.type.SqlTypes;
 @Setter(AccessLevel.PACKAGE)
 @Table(name = "sprint", schema = "project_planning")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public class Sprint {
+@ValidDueDate
+public class Sprint implements HasDueDateItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -71,6 +73,7 @@ public class Sprint {
     @Column(name = "created_at")
     @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     private Instant createdAt;
 
     @Column(name = "last_updated_at")
@@ -82,6 +85,11 @@ public class Sprint {
     @JdbcTypeCode(SqlTypes.UUID)
     @NotNull
     private UUID lastUpdatedById;
+
+    @Override
+    public Instant getDueDate() {
+        return dateRange.getEndDate();
+    }
 
     @Column(name = "creator_id")
     @JdbcTypeCode(SqlTypes.UUID)

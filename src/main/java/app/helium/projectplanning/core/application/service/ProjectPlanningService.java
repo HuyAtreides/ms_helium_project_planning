@@ -10,7 +10,6 @@ import app.helium.projectplanning.core.domain.model.Project;
 import app.helium.projectplanning.core.domain.model.Sprint;
 import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
 import app.helium.projectplanning.core.domain.request.CreateSprintRequest;
-import app.helium.projectplanning.infra.datetime.DateTimeService;
 import app.helium.projectplanning.infra.repository.ProjectRepository;
 import java.time.Instant;
 import java.util.UUID;
@@ -33,7 +32,7 @@ public class ProjectPlanningService {
     private final CreateSprintRequestMapper createSprintRequestMapper = Mappers.getMapper(
         CreateSprintRequestMapper.class
     );
-    private final DateTimeService dateTimeService;
+    private final AbstractDateTimeService dateTimeService;
     private final ProjectRepository projectRepository;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

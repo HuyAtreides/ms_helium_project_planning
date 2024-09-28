@@ -36,7 +36,7 @@ public class CreateSprintIntegrationTest {
                 .goal("Create sprint feature")
                 .name("T24 Sprint")
                 .dueDate(Instant.parse("2025-05-07T10:29:00Z"))
-                .startDate(Instant.parse(CommonTestConstant.FIXED_DATETIME))
+                .startDate(CommonTestConstant.FIXED_NOW_INSTANT)
                 .build()
         );
 
@@ -59,7 +59,7 @@ public class CreateSprintIntegrationTest {
                         .goal("Create sprint feature")
                         .name("T24 Sprint")
                         .dueDate(Instant.parse("2025-05-07T10:29:00Z"))
-                        .startDate(Instant.parse(CommonTestConstant.FIXED_DATETIME))
+                        .startDate(CommonTestConstant.FIXED_NOW_INSTANT)
                         .build()
                 )
         );

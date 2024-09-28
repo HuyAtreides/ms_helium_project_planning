@@ -39,7 +39,7 @@ public class CreateIssueIntegrationTest {
                 .assigneeId(UUID.randomUUID())
                 .summary("New Issue")
                 .projectId(CommonTestConstant.DEFAULT_TEST_PROJECT_ID)
-                .startDate(Instant.parse(CommonTestConstant.FIXED_DATETIME))
+                .startDate(CommonTestConstant.FIXED_NOW_INSTANT)
                 .dueDate(Instant.parse("2025-05-07T17:15:00Z"))
                 .reporterId(CommonTestConstant.DEFAULT_USER_ID)
                 .assigneeId(CommonTestConstant.DEFAULT_USER_ID)
