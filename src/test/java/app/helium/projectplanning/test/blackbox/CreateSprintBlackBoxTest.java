@@ -5,8 +5,8 @@ import static io.restassured.RestAssured.given;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 
 import app.helium.projectplanning.infra.api.rest.controller.ApiEndPoint;
+import app.helium.projectplanning.test.shared.constant.CommonTestConstant;
 import io.restassured.http.ContentType;
-import java.util.UUID;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -16,8 +16,7 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.jdbc.SqlConfig.TransactionMode;
 
 @BlackBoxTest
-public class CreateIssueBlackBoxTest {
-
+public class CreateSprintBlackBoxTest {
     @Value("${server.servlet.context-path}")
     private String contextPath;
 
@@ -29,19 +28,20 @@ public class CreateIssueBlackBoxTest {
             },
             config = @SqlConfig(transactionMode = TransactionMode.ISOLATED)
     )
-    void issue_should_be_created_when_call_api_with_valid_payload() throws JSONException {
+    void sprint_should_be_created_when_call_api_with_valid_payload() throws JSONException {
         String response = given()
                 .basePath(contextPath)
-                .body(readJsonFromFile("api/create_issue/valid_request.json"))
-                .pathParam("project_id", UUID.fromString("1d6846ce-0a75-4a39-a49e-dea0d4be8b40"))
+                .body(readJsonFromFile("api/create_sprint/valid_request.json"))
+                .pathParam("project_id", CommonTestConstant.DEFAULT_TEST_PROJECT_ID)
                 .contentType(ContentType.JSON)
                 .when()
-                .post(ApiEndPoint.CREATE_NEW_ISSUE)
+                .post(ApiEndPoint.CREATE_NEW_SPRINT)
                 .then()
                 .statusCode(201)
                 .and().extract().body().asString();
-        String expectedResponse = readJsonFromFile("api/create_issue/response.json");
+        String expectedResponse = readJsonFromFile("api/create_sprint/response.json");
 
         assertEquals(expectedResponse, response, JSONCompareMode.LENIENT);
     }
+
 }

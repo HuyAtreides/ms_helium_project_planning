@@ -9,14 +9,9 @@ import app.helium.projectplanning.infra.api.rest.response.IssueTypePayload;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(uses = CommonMapper.class)
 public interface IssuePayloadMapper {
-
-    @Mapping(target = "dueDate", source = "dateRange.endDate")
-    @Mapping(target = "startDate", source = "dateRange.startDate")
     IssuePayload fromIssueModel(Issue issue);
-
     IssueStatusPayload fromIssueStatusModel(IssueStatus issueType);
-
     IssueTypePayload fromIssueTypeModel(IssueType issueType);
 }

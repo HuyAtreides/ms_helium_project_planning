@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(uses = CommonMapper.class)
 public interface CreateIssuePayloadMapper {
     @Mapping(target = ".", source = "payload")
     @Mapping(target = "projectId", source = "projectId")

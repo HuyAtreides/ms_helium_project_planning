@@ -10,6 +10,7 @@ import app.helium.projectplanning.core.domain.model.Project;
 import app.helium.projectplanning.core.domain.model.Sprint;
 import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
 import app.helium.projectplanning.core.domain.request.CreateSprintRequest;
+import app.helium.projectplanning.infra.datetime.DateTimeService;
 import app.helium.projectplanning.infra.repository.ProjectRepository;
 import java.time.Instant;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class ProjectPlanningService {
     private final CreateSprintRequestMapper createSprintRequestMapper = Mappers.getMapper(
         CreateSprintRequestMapper.class
     );
+    private final DateTimeService dateTimeService;
     private final ProjectRepository projectRepository;
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -44,8 +46,9 @@ public class ProjectPlanningService {
 
         //TODO: retrieve user id from security context
         UUID creatorId = UUID.fromString("e0dfb21f-1ad9-42eb-94a3-98383ffa6618");
+        Instant now = dateTimeService.getCurrentInstant();
 
-        CreateIssueRequest request = mapper.mapToCreateIssueRequest(command, creatorId, issueName, project);
+        CreateIssueRequest request = mapper.mapToCreateIssueRequest(command, creatorId, issueName, project, now);
         Issue issue = issueFactory.createIssue(request);
         project.addIssue(issue);
         projectRepository.save(project);
@@ -58,10 +61,12 @@ public class ProjectPlanningService {
         //TODO: retrieve user id from security context
         UUID creatorId = UUID.fromString("e0dfb21f-1ad9-42eb-94a3-98383ffa6618");
         Project project = projectRepository.findById(command.getProjectId()).orElseThrow();
-        //TODO: use date time as dependency
-        Instant now = Instant.now();
-        CreateSprintRequest request = createSprintRequestMapper.toCreateSprintRequest(command, creatorId, now);
+        Instant now = dateTimeService.getCurrentInstant();
+        UUID id = UUID.randomUUID();
+        CreateSprintRequest request = createSprintRequestMapper.mapToCreateSprintRequest(id, command, creatorId, now);
+        Sprint newSprint = project.createNewSprint(request);
+        projectRepository.save(project);
 
-        return project.createNewSprint(request);
+        return newSprint;
     }
 }

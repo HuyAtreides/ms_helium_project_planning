@@ -14,6 +14,7 @@ public class CreateIssueRequest {
     private String description;
     private List<String> attachmentURLs;
     private Integer pointEstimate;
+    private Instant createdAt;
     private UUID issueTypeId;
     private String issueName;
     private UUID issueStatusId;

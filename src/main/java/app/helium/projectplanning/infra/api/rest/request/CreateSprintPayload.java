@@ -1,14 +1,12 @@
-package app.helium.projectplanning.core.application.command;
+package app.helium.projectplanning.infra.api.rest.request;
 
 import java.time.Instant;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class CreateSprintCommand {
-    private UUID projectId;
+public class CreateSprintPayload {
     private String name;
     private String goal;
     private Instant startDate;

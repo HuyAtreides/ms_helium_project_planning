@@ -13,5 +13,6 @@ public interface CreateSprintRequestMapper {
 
     @Mapping(target = "creatorId", source = "creatorId")
     @Mapping(target = "createdAt", source = "createdAt")
-    CreateSprintRequest toCreateSprintRequest(CreateSprintCommand command, UUID creatorId, Instant createdAt);
+    @Mapping(target = "id", source = "id")
+    CreateSprintRequest mapToCreateSprintRequest(UUID id, CreateSprintCommand command, UUID creatorId, Instant createdAt);
 }

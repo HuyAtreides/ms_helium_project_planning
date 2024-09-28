@@ -31,7 +31,7 @@ import org.hibernate.type.SqlTypes;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(access = AccessLevel.PACKAGE)
-@Getter
+@Getter(AccessLevel.PACKAGE)
 @Setter(AccessLevel.PACKAGE)
 @Table(name = "sprint", schema = "project_planning")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -42,14 +42,18 @@ public class Sprint {
     @Column(name = "id", nullable = false)
     @JdbcTypeCode(SqlTypes.UUID)
     @NotNull
+    @Getter(AccessLevel.PUBLIC)
     @EqualsAndHashCode.Include
     private UUID id;
 
     @Column(name = "name")
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private String name;
+    @Default
+    @Getter(AccessLevel.PUBLIC)
+    private String name = "New Sprint";
 
     @Column(name = "goal")
+    @Getter(AccessLevel.PUBLIC)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String goal;
 
@@ -75,7 +79,7 @@ public class Sprint {
     private Instant lastUpdatedAt;
 
     @Column(name = "last_updated_by_id")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP_UTC)
+    @JdbcTypeCode(SqlTypes.UUID)
     @NotNull
     private UUID lastUpdatedById;
 
@@ -87,6 +91,7 @@ public class Sprint {
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "sprint_id")
     @Default
+    @Getter(AccessLevel.PUBLIC)
     private Set<Issue> issues = new LinkedHashSet<>();
 
     //TODO: implement after create sprint feature

@@ -20,6 +20,7 @@ import app.helium.projectplanning.core.domain.model.SubTask;
 import app.helium.projectplanning.core.domain.model.Task;
 import app.helium.projectplanning.core.domain.model.UserStory;
 import app.helium.projectplanning.core.domain.request.CreateIssueRequest;
+import app.helium.projectplanning.test.shared.constant.CommonTestConstant;
 import app.helium.projectplanning.test.shared.validator.DomainEntityValidator;
 import jakarta.validation.ConstraintViolationException;
 import java.time.Instant;
@@ -43,7 +44,7 @@ public class CreateIssueTest {
     static private final UUID issueStatusId = UUID.fromString("97880669-bde4-4737-8e0d-cd8e14b6588f");
     static private final UUID issueTypeId = UUID.fromString("7231b12c-fd1a-4312-9a2f-aca28bf765dc");
     static private final Project project = Project.builder()
-            .id(UUID.randomUUID())
+            .id(CommonTestConstant.DEFAULT_TEST_PROJECT_ID)
             .issueStatuses(
                     Set.of(IssueStatus.builder().id(issueStatusId).name("in_progress").build())
             )
@@ -310,6 +311,7 @@ public class CreateIssueTest {
                                         .issueName("HE-1104")
                                         .creatorId(UUID.randomUUID())
                                         .project(project)
+                                        .createdAt(Instant.parse(CommonTestConstant.FIXED_DATETIME))
                                         .issueStatusId(issueStatusId)
                                         .issueTypeId(issueTypeId)
                                         .build())
@@ -322,6 +324,7 @@ public class CreateIssueTest {
                                         .issueName("HE-1104")
                                         .creatorId(UUID.randomUUID())
                                         .project(project)
+                                        .createdAt(Instant.parse(CommonTestConstant.FIXED_DATETIME))
                                         .pointEstimate(2)
                                         .issueStatusId(issueStatusId)
                                         .issueTypeId(issueTypeId)
@@ -338,6 +341,7 @@ public class CreateIssueTest {
                                         .pointEstimate(1)
                                         .creatorId(UUID.randomUUID())
                                         .project(project)
+                                        .createdAt(Instant.parse(CommonTestConstant.FIXED_DATETIME))
                                         .issueStatusId(issueStatusId)
                                         .issueTypeId(issueTypeId)
                                         .build())
@@ -358,6 +362,7 @@ public class CreateIssueTest {
                                         .pointEstimate(1)
                                         .creatorId(UUID.randomUUID())
                                         .project(project)
+                                        .createdAt(Instant.parse(CommonTestConstant.FIXED_DATETIME))
                                         .issueStatusId(issueStatusId)
                                         .issueTypeId(issueTypeId)
                                         .build())

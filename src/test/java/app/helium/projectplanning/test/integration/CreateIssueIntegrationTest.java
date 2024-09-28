@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import app.helium.projectplanning.core.application.command.CreateIssueCommand;
 import app.helium.projectplanning.core.application.service.ProjectPlanningService;
+import app.helium.projectplanning.test.shared.constant.CommonTestConstant;
+import java.time.Instant;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -35,7 +38,13 @@ public class CreateIssueIntegrationTest {
         var command = CreateIssueCommand.builder()
                 .assigneeId(UUID.randomUUID())
                 .summary("New Issue")
-                .projectId(UUID.fromString("1d6846ce-0a75-4a39-a49e-dea0d4be8b40"))
+                .projectId(CommonTestConstant.DEFAULT_TEST_PROJECT_ID)
+                .startDate(Instant.parse(CommonTestConstant.FIXED_DATETIME))
+                .dueDate(Instant.parse("2025-05-07T17:15:00Z"))
+                .reporterId(CommonTestConstant.DEFAULT_USER_ID)
+                .assigneeId(CommonTestConstant.DEFAULT_USER_ID)
+                .description("Implement create issue")
+                .attachmentURLs(List.of("https://media.helium.com/requirements.pdf", "https://media.helium.com/figma"))
                 .pointEstimate(2)
                 .issueStatusId(issueStatusId)
                 .issueTypeId(issueTypeId)

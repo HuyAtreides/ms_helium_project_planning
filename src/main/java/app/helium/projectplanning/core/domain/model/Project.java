@@ -57,22 +57,22 @@ public class Project {
     private UUID defaultAssigneeId;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", updatable = false)
     @Default
     private Set<Issue> issues = new LinkedHashSet<>();
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", updatable = false)
     @Default
     private Set<Sprint> sprints = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", updatable = false)
     @Default
     private Set<IssueType> issueTypes = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", updatable = false)
     @Default
     private Set<IssueStatus> issueStatuses = new LinkedHashSet<>();
 

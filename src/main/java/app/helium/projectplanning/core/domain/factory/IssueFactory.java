@@ -41,7 +41,7 @@ public class IssueFactory {
                 : request.getAssigneeId();
         UUID reporterId = request.getReporterId() == null ? project.getProjectLeadId()
                 : request.getReporterId();
-        Instant now = Instant.now();
+        Instant now = request.getCreatedAt();
 
         return builder
                 .id(UUID.randomUUID())

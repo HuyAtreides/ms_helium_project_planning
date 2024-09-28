@@ -1,5 +1,6 @@
 package app.helium.projectplanning.infra.api.rest.response;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class IssuePayload {
     private UUID creatorId;
     private IssueTypePayload type;
     private IssueStatusPayload status;
-    private Instant startDate;
-    private Instant dueDate;
+
+    @JsonUnwrapped
+    private DateRangePayload dateRange;
 }
