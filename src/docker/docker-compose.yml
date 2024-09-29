@@ -1,5 +1,5 @@
 ---
-version: '3'
+version: '3.5'
 services:
   database:
     image: 'postgres:16.4'
@@ -12,6 +12,8 @@ services:
       - '5430:5432'
     volumes:
       - ./init_db/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - default_network
 
   broker:
     image: confluentinc/cp-server:7.5.0
@@ -47,6 +49,8 @@ services:
       # Replace CLUSTER_ID with a unique base64 UUID using "bin/kafka-storage.sh random-uuid"
       # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    networks:
+      - default_network
 
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.0
@@ -67,6 +71,8 @@ services:
       interval: 7s
       timeout: 5s
       retries: 3
+    networks:
+      - default_network
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.5.0
@@ -91,6 +97,8 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+    networks:
+      - default_network
 
   create-topic:
     image: apache/kafka:3.8.0
@@ -106,6 +114,9 @@ services:
       --replication-factor 1 \
       --topic project
     "
+    networks:
+      - default_network
+
   rest-proxy:
     image: confluentinc/cp-kafka-rest:7.5.0
     depends_on:
@@ -120,3 +131,10 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: 'broker:29092'
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+    networks:
+      - default_network
+
+networks:
+  default_network:
+    name: default_network
+    driver: bridge
