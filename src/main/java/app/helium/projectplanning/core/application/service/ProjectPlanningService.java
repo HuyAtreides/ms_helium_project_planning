@@ -57,6 +57,7 @@ public class ProjectPlanningService {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public Sprint createSprint(CreateSprintCommand command) {
+        log.info("message = create new sprint, request = {}", command);
         //TODO: retrieve user id from security context
         UUID creatorId = UUID.fromString("e0dfb21f-1ad9-42eb-94a3-98383ffa6618");
         Project project = projectRepository.findById(command.getProjectId()).orElseThrow();

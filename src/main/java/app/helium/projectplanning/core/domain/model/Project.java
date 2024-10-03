@@ -6,6 +6,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
@@ -23,6 +26,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 
 @Entity
@@ -32,6 +36,19 @@ import org.hibernate.type.SqlTypes;
 @Setter(AccessLevel.PACKAGE)
 @Table(name = "project_read_only", schema = "project_planning")
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
+@NamedEntityGraph(name = "project(issues)", attributeNodes = {
+        @NamedAttributeNode(value = "issues", subgraph = "project(issues(type, status))"),
+        @NamedAttributeNode("issueTypes"),
+        @NamedAttributeNode("issueStatuses")
+}, subgraphs = {
+        @NamedSubgraph(name = "project(issue(type, status))", attributeNodes = {
+                @NamedAttributeNode("type"),
+                @NamedAttributeNode("status")
+        })
+})
+@NamedEntityGraph(name = "project(sprints)", attributeNodes = {
+        @NamedAttributeNode("sprints")
+})
 @Immutable
 public class Project {
 

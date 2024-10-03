@@ -134,5 +134,5 @@ dockerCompose {
 }
 
 bootRun {
-    args += ["--spring.profiles.active=dev"]
+    args += ["-Dspring.profiles.active=dev"]
 }

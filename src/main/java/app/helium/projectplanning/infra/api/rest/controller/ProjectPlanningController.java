@@ -37,7 +37,6 @@ public class ProjectPlanningController {
             @PathVariable(name = "project_id") UUID projectId,
             @RequestBody CreateIssuePayload payload
     ) {
-
         Issue issue = projectPlanningService.createIssue(mapper.toCommand(payload, projectId));
 
         return issuePayloadMapper.fromIssueModel(issue);

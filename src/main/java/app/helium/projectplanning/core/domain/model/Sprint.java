@@ -51,6 +51,7 @@ public class Sprint implements HasDueDateItem {
     @Column(name = "name")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     @Default
+    @NotNull
     @Getter(AccessLevel.PUBLIC)
     private String name = "New Sprint";
 
